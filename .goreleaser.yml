@@ -35,7 +35,7 @@ checksum:
   name_template: "{{ .ProjectName }}-{{ .Version }}-checksums.txt"
 release:
   github:
-      owner: achannarasappa
+      owner: junior
       name: ticker
 # brews:
 #   -
@@ -59,7 +59,7 @@ dockers:
     image_templates:
     - "ghcr.io/junior/ticker:latest"
     - "ghcr.io/junior/ticker:{{ .Tag }}"
-    - "ghcr.io/junior/ticker:v{{ .Major }}"
+    - "ghcr.io/junior/ticker:{{ .Major }}.{{ .Minor }}"
     dockerfile: Dockerfile
 
     # Whether to use `docker buildx build` instead of `docker build`.
