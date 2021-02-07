@@ -54,13 +54,16 @@ dockers:
     goos: linux
     goarch: amd64
     goarm: ''
-    ids:
-    - ticker
+    # ids:
+    # - ticker
+    binaries: [ticker]
     image_templates:
     - "ghcr.io/junior/ticker:latest"
     - "ghcr.io/junior/ticker:{{ .Tag }}"
     - "ghcr.io/junior/ticker:{{ .Major }}.{{ .Minor }}"
-    dockerfile: Dockerfile
+    - "ghcr.io/junior/ticker:{{ .Major }}.{{ .Minor }}"
+    - "ghcr.io/junior/ticker:{{ .Major }}.{{ .Minor }}.{{ .Patch }}"
+    dockerfile: goreleaser.Dockerfile
 
     # Whether to use `docker buildx build` instead of `docker build`.
     # You probably want to set it to true when using flags like `--platform`.
@@ -74,3 +77,4 @@ dockers:
     - "--label=org.opencontainers.image.title={{.ProjectName}}"
     - "--label=org.opencontainers.image.revision={{.FullCommit}}"
     - "--label=org.opencontainers.image.version={{.Version}}"
+    - "--label=org.opencontainers.image.source={{.GitURL}}"
