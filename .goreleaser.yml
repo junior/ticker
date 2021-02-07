@@ -37,15 +37,40 @@ release:
   github:
       owner: achannarasappa
       name: ticker
-brews:
+# brews:
+#   -
+#     name: ticker
+#     tap:
+#       owner: achannarasappa
+#       name: tap
+#     commit_author:
+#       name: achannarasappa
+#       email: git@ani.dev
+#     homepage: "https://github.com/achannarasappa/ticker"
+#     description: "Terminal stock ticker with live updates and position tracking"
+#     license: "GPLv3"
+dockers:
   -
-    name: ticker
-    tap:
-      owner: achannarasappa
-      name: tap
-    commit_author:
-      name: achannarasappa
-      email: git@ani.dev
-    homepage: "https://github.com/achannarasappa/ticker"
-    description: "Terminal stock ticker with live updates and position tracking"
-    license: "GPLv3"
+    goos: linux
+    goarch: amd64
+    goarm: ''
+    ids:
+    - ticker
+    image_templates:
+    - "ghcr.io/junior/ticker:latest"
+    - "ghcr.io/junior/ticker:{{ .Tag }}"
+    - "ghcr.io/junior/ticker:v{{ .Major }}"
+    dockerfile: Dockerfile
+
+    # Whether to use `docker buildx build` instead of `docker build`.
+    # You probably want to set it to true when using flags like `--platform`.
+    # If true, will also add `--load` to the build flags.
+    # Defaults to false.
+    # use_buildx: true
+
+    build_flag_templates:
+    - "--pull"
+    - "--label=org.opencontainers.image.created={{.Date}}"
+    - "--label=org.opencontainers.image.title={{.ProjectName}}"
+    - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+    - "--label=org.opencontainers.image.version={{.Version}}"
