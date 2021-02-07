@@ -50,31 +50,33 @@ release:
 #     description: "Terminal stock ticker with live updates and position tracking"
 #     license: "GPLv3"
 dockers:
-  -
-    goos: linux
-    goarch: amd64
-    goarm: ''
-    # ids:
-    # - ticker
-    binaries: [ticker]
-    image_templates:
-    - "ghcr.io/junior/ticker:latest"
-    - "ghcr.io/junior/ticker:{{ .Tag }}"
-    - "ghcr.io/junior/ticker:{{ .Major }}.{{ .Minor }}"
-    - "ghcr.io/junior/ticker:{{ .Major }}.{{ .Minor }}"
-    - "ghcr.io/junior/ticker:{{ .Major }}.{{ .Minor }}.{{ .Patch }}"
-    dockerfile: goreleaser.Dockerfile
-
-    # Whether to use `docker buildx build` instead of `docker build`.
-    # You probably want to set it to true when using flags like `--platform`.
-    # If true, will also add `--load` to the build flags.
-    # Defaults to false.
-    # use_buildx: true
-
-    build_flag_templates:
-    - "--pull"
-    - "--label=org.opencontainers.image.created={{.Date}}"
-    - "--label=org.opencontainers.image.title={{.ProjectName}}"
-    - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-    - "--label=org.opencontainers.image.version={{.Version}}"
-    - "--label=org.opencontainers.image.source={{.GitURL}}"
+- image_templates: ["ghcr.io/junior/ticker:{{ .Version }}-amd64"]
+  binaries: [ticker]
+  dockerfile: goreleaser.Dockerfile
+  use_buildx: true
+  build_flag_templates:
+  - "--platform=linux/amd64"
+  - "--pull"
+  - "--label=org.opencontainers.image.created={{.Date}}"
+  - "--label=org.opencontainers.image.title={{.ProjectName}}"
+  - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+  - "--label=org.opencontainers.image.version={{.Version}}"
+  - "--label=org.opencontainers.image.source={{.GitURL}}"
+- image_templates: ["ghcr.io/junior/ticker:{{ .Version }}-arm64v8"]
+  binaries: [ticker]
+  goarch: arm64
+  dockerfile: goreleaser.Dockerfile
+  use_buildx: true
+  build_flag_templates:
+  - "--platform=linux/arm64/v8"
+  - "--pull"
+  - "--label=org.opencontainers.image.created={{.Date}}"
+  - "--label=org.opencontainers.image.title={{.ProjectName}}"
+  - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+  - "--label=org.opencontainers.image.version={{.Version}}"
+  - "--label=org.opencontainers.image.source={{.GitURL}}"
+docker_manifests:
+- name_template: ghcr.io/junior/ticker:{{ .Version }}
+  image_templates:
+  - ghcr.io/junior/ticker:{{ .Version }}-amd64
+  - ghcr.io/junior/ticker:{{ .Version }}-arm64v8
